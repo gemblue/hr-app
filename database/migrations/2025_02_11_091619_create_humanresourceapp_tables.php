@@ -41,7 +41,6 @@ return new class extends Migration
             $table->timestamp('hire_date');
             $table->foreignId('department_id')->constrained('departments');
             $table->foreignId('role_id')->constrained('roles');
-            $table->foreignId('supervisor_id')->nullable()->constrained('employees');
             $table->string('status');
             $table->decimal('salary', 10, 2);
             $table->timestamps();
