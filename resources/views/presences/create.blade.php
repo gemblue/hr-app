@@ -84,15 +84,41 @@
 
                 @else
 
+                <!-- 
+                Employee 
+                
+                Disini gak usah repot repot bikin field status dst, langsung aja input location.
+                Nnt kita handle di backendnya, kalo locationnya sesuai dengan lokasi kantor, maka statusnya present, selain itu statusnya absent.
+                -->
                 <form action="{{ route('presences.store') }}" method="POST">
                     @csrf
-        
+                    
+                    <div class="mb-3 alert alert-warning"><b>Note</b> : Mohon izinkan akses lokasi, supaya presensi diterima.</div>
+                    
                     <div class="mb-3">
-                        <label for="check_in" class="form-label">Location</label>
-                        <input type="text" name="location" class="form-control" id="location" required>
+                        <label class="form-label">Latitude</label>
+                        <input type="text" class="form-control" name="latitude" id="latitude" required>
                     </div>
-        
-                   <button type="submit" class="btn btn-primary">Submit</button>
+
+                    <div class="mb-3">
+                        <label class="form-label">Longitude</label>
+                        <input type="text" class="form-control" name="longitude" id="longitude" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <iframe 
+                            width="500" 
+                            height="300" 
+                            frameborder="0" 
+                            scrolling="no" 
+                            marginheight="0" 
+                            marginwidth="0" 
+                            src=""
+                            >
+                        </iframe>
+                    </div>
+
+                    <button type="submit" id="btn-present" class="btn btn-primary" disabled>Present</button>
                 </form>
 
                 @endif
@@ -104,7 +130,46 @@
 </div>
 
 <script>
-    
+    const iframe = document.querySelector('iframe');
+    const officeLat = -6.200000; // Latitude for Jakarta
+    const officeLon = 106.816666; // Longitude for Jakarta
+    const threshold = 0.01; // Threshold for distance comparison
+
+    // Latitude for Office.
+    // const officeLat = -6.8911104;
+    // const officeLon = 107.544576;
+    // const threshold = 0.01;
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        iframe.src = `https://maps.google.com/maps?q=${lat},${lon}&hl=es&z=14&output=embed`;
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lon;
+
+                // Compare current location with office location
+                const distance = Math.sqrt(Math.pow(lat - officeLat, 2) + Math.pow(lon - officeLon, 2));
+                if (distance <= threshold) {
+                    // User is at the office
+                    alert("Kamu berada di kantor, selamat bekerja.");
+                    document.getElementById('btn-present').removeAttribute('disabled');
+                } else {
+                    alert("Kamu tidak berada di kantor, presensi tidak diterima. Refresh ulang jendela ini / hubungi admin jika ada kesalahan");
+                }
+            }, function(error) {
+                console.error("Error Code = " + error.code + " - " + error.message);
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    });
 </script>
 
 @endsection

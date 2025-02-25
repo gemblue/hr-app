@@ -12,6 +12,8 @@ class Presence extends Model
 
     protected $fillable = [
         'employee_id',
+        'latitude',
+        'longitude',
         'check_in',
         'check_out',
         'date',
