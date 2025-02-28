@@ -131,14 +131,14 @@
 
 <script>
     const iframe = document.querySelector('iframe');
-    const officeLat = -6.200000; // Latitude for Jakarta
-    const officeLon = 106.816666; // Longitude for Jakarta
-    const threshold = 0.01; // Threshold for distance comparison
+    // const officeLat = -6.200000; // Latitude for Jakarta
+    // const officeLon = 106.816666; // Longitude for Jakarta
+    // const threshold = 0.01; // Threshold for distance comparison
 
     // Latitude for Office.
-    // const officeLat = -6.8911104;
-    // const officeLon = 107.544576;
-    // const threshold = 0.01;
+    const officeLat = -6.8911104;
+    const officeLon = 107.544576;
+    const threshold = 0.01;
 
     navigator.geolocation.getCurrentPosition(function(position) {
         const lat = position.coords.latitude;

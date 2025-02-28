@@ -57,7 +57,7 @@
                             <th>Check-in</th>
                             <th>Check-out</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,12 +78,16 @@
                                 </td>
 
                                 <td>
+                                    @if(session('role') == 'HR')
+                                    
                                     <a href="{{ route('presences.edit', $attendance->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                     <form action="{{ route('presences.destroy', $attendance->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

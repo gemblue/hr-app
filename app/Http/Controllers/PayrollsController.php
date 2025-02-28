@@ -12,7 +12,12 @@ class PayrollsController extends Controller
     // Display a listing of the payrolls
     public function index()
     {
-        $payrolls = Payroll::with('employee')->get(); // Get all payrolls with their employee details
+        if (session('role')  == 'HR') {
+            $payrolls = Payroll::with('employee')->get();
+        } else {
+            $payrolls = Payroll::with('employee')->where('employee_id', session('employee_id'))->get();
+        }
+
         return view('payrolls.index', compact('payrolls'));
     }
 

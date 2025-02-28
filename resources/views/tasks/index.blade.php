@@ -33,7 +33,9 @@
             <div class="card-body">
 
                 <div class="d-flex">
-                    <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3 ms-auto">New Task</a>
+                    @if (session('role') == 'HR')
+                        <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3 ms-auto">New Task</a>
+                    @endif
                 </div>
 
                 @if(session('success'))
@@ -49,7 +51,7 @@
                             <th>Assigned To</th>
                             <th>Due Date</th>
                             <th>Status</th>
-                            <th>Option</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,12 +71,21 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-info btn-sm" href="{{ route('tasks.show', $task->id) }}">View</a>
-                                    <a class="btn btn-warning btn-sm" href="{{ route('tasks.edit', $task->id) }}">Edit</a>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    
+                                    @if ($task->status == 'pending')
+                                        <a class="btn btn-success btn-sm" href="{{ route('tasks.done', $task->id) }}">Mark as Done</a>
+                                    @else 
+                                        <a class="btn btn-warning btn-sm" href="{{ route('tasks.pending', $task->id) }}">Mark as Pending</a>
+                                    @endif
+                                    
+                                    @if (session('role') == 'HR')
+                                        <a class="btn btn-warning btn-sm" href="{{ route('tasks.edit', $task->id) }}">Edit</a>
+                                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

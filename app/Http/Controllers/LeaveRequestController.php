@@ -10,18 +10,29 @@ class LeaveRequestController extends Controller
 {
     public function index()
     {
-        $leaveRequests = LeaveRequest::all();
+        if (session('role')  == 'HR') {
+            $leaveRequests = LeaveRequest::all();
+        } else {
+            $leaveRequests = LeaveRequest::where('employee_id', session('employee_id'))->get();
+        }
+        
         return view('leave_requests.index', compact('leaveRequests'));
     }
 
     public function create()
     {
-        $employees = Employee::all(); // Ambil semua karyawan
+        $employees = Employee::all();
+
         return view('leave_requests.create', compact('employees'));
     }
 
     public function store(Request $request)
     {
+        if (session('role') != 'HR') {
+            // Kalau bukan HR, maka employee_id diambil dari session.
+            $request->merge(['employee_id' => session('employee_id')]);
+        }
+
         // Ketika pertama kali membuat request cuti, statusnya adalah pending
         $request->merge(['status' => 'pending']);
 

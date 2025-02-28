@@ -47,6 +47,8 @@
                         </ul>
                     </div>
                 @endif
+
+                @if (session('role') == 'HR')
                 
                 <form action="{{ route('leave-requests.store') }}" method="POST">
                     @csrf
@@ -101,6 +103,48 @@
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a href="{{ route('leave-requests.index') }}" class="btn btn-secondary">Back to Leave Requests</a>
                 </form>
+
+                @else
+                
+                <form action="{{ route('leave-requests.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="leave_type" class="form-label">Leave Type</label>
+                        <select class="form-control @error('leave_type') is-invalid @enderror" name="leave_type" required>
+                            <option value="" disabled selected>Choose ..</option>
+                            <option value="Cuti Tahunan" {{ old('leave_type') == 'Cuti Tahunan' ? 'selected' : '' }}>Cuti Tahunan</option>
+                            <option value="Cuti Sakit" {{ old('leave_type') == 'Cuti Sakit' ? 'selected' : '' }}>Cuti Sakit</option>
+                            <option value="Cuti Bersama" {{ old('leave_type') == 'Cuti Bersama' ? 'selected' : '' }}>Cuti Bersama</option>
+                            <option value="Cuti Melahirkan" {{ old('leave_type') == 'Cuti Melahirkan' ? 'selected' : '' }}>Cuti Melahirkan</option>
+                            <option value="Cuti Ayah" {{ old('leave_type') == 'Cuti Ayah' ? 'selected' : '' }}>Cuti Ayah</option>
+                            <option value="Cuti Tanpa Gaji" {{ old('leave_type') == 'Cuti Tanpa Gaji' ? 'selected' : '' }}>Cuti Tanpa Gaji</option>
+                        </select>
+                        @error('leave_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control @error('start_date') is-invalid @enderror datetimeleave" name="start_date" value="{{ old('start_date') }}" required>
+                        @error('start_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control @error('end_date') is-invalid @enderror datetimeleave" name="end_date" value="{{ old('end_date') }}" required>
+                        @error('end_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send</button>
+                    <a href="{{ route('leave-requests.index') }}" class="btn btn-secondary">Back to List</a>
+                </form>
+            
+                @endif
             </div>
         </div>
     </section>

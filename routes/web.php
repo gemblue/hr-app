@@ -36,6 +36,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Resource routes for tasks
     Route::resource('tasks', TaskController::class)->middleware(['role:Developer,HR']);
+    Route::get('tasks/done/{id}', [TaskController::class, 'done'])->name('tasks.done');
+    Route::get('tasks/pending/{id}', [TaskController::class, 'pending'])->name('tasks.pending');
 
     // Resource routes for payroll
     Route::resource('payrolls', PayrollsController::class)->middleware(['role:Developer,HR']);

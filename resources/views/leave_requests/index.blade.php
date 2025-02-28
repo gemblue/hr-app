@@ -70,18 +70,20 @@
                                 <td>{{ \Carbon\Carbon::parse($leaveRequest->start_date)->format('d, M Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($leaveRequest->end_date)->format('d, M Y') }}</td>
                                 <td>
-                                    @if(in_array($leaveRequest->status, ['pending', 'rejected']))
-                                        <a onclick="return confirm('Sure?');" href="{{ route('leave-requests.confirm', $leaveRequest->id) }}" class="btn btn-success btn-sm">Confirm</a>
-                                    @else 
-                                        <a onclick="return confirm('Sure?');" href="{{ route('leave-requests.reject', $leaveRequest->id) }}" class="btn btn-warning btn-sm">Reject</a>
-                                    @endif
+                                    @if (session('role') == 'HR')
+                                        @if(in_array($leaveRequest->status, ['pending', 'rejected']))
+                                            <a onclick="return confirm('Sure?');" href="{{ route('leave-requests.confirm', $leaveRequest->id) }}" class="btn btn-success btn-sm">Confirm</a>
+                                        @else 
+                                            <a onclick="return confirm('Sure?');" href="{{ route('leave-requests.reject', $leaveRequest->id) }}" class="btn btn-warning btn-sm">Reject</a>
+                                        @endif
 
-                                    <a href="{{ route('leave-requests.edit', $leaveRequest->id) }}" class="btn btn-info btn-sm">Edit</a>
-                                    <form action="{{ route('leave-requests.destroy', $leaveRequest->id) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                        <a href="{{ route('leave-requests.edit', $leaveRequest->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                        <form action="{{ route('leave-requests.destroy', $leaveRequest->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

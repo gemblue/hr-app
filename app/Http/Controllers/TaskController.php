@@ -13,7 +13,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        if (session('role')  == 'HR') {
+            $tasks = Task::all();
+        } else {
+            $tasks = Task::where('assigned_to', session('employee_id'))->get();
+        }
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -77,6 +82,28 @@ class TaskController extends Controller
         $task->update($validated);
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
+    }
+
+    /**
+     * Update task status.
+     */
+    public function done(int $id)
+    {
+        $task = Task::find($id);
+        $task->update(['status' => 'done']);
+
+        return redirect()->route('tasks.index')->with('success', 'Task marked as done.');
+    }
+
+    /**
+     * Update task status.
+     */
+    public function pending(int $id)
+    {
+        $task = Task::find($id);
+        $task->update(['status' => 'pending']);
+
+        return redirect()->route('tasks.index')->with('success', 'Task marked as pending.');
     }
 
     /**
