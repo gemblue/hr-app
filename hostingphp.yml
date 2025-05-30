@@ -1,0 +1,33 @@
+project_name: HR App
+framework: laravel
+database:
+  name: hrapp
+  user: hrapp
+  password: 12345
+  host: localhost
+  port: 3306
+  auto_migrate: true
+  create_user: true
+  tables:
+    - name: jadwal
+      fields:
+        - id: id
+          type: INT(5)
+          attributes: "AUTO_INCREMENT PRIMARY KEY"
+        - name: nama_latihan
+          type: VARCHAR(100)
+        - name: deskripsi
+          type: VARCHAR(100)
+        - name: durasi
+          type: VARCHAR(100)
+        - name: tanggal
+          type: timestamp
+commands:
+  - "composer install --no-dev --optimize-autoloader"
+  - "php artisan migrate --force"
+  - "php artisan key:generate"
+  - "php artisan config:cache"
+  - "php artisan route:cache"
+  - "php artisan view:cache"
+  - "php artisan storage:link"
+  - "chmod -R 775 storage bootstrap/cache"
