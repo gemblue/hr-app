@@ -31,3 +31,5 @@ commands:
   - "php artisan view:cache"
   - "php artisan storage:link"
   - "chmod -R 775 storage bootstrap/cache"
+  - "npm install"
+  - "npm run build"
